@@ -27,7 +27,6 @@ native/
     ├── common
     └── win64
 
-3 directories, 0 files
 ```
 
 **Create a folder for plugin**
@@ -42,31 +41,26 @@ $ mkdir -p native/plugins/aes/windows/
 $ tree native/plugins/
 native/plugins/
 └── aes
+    ├── include
+    │   └── AES.h
     └── windows
-        ├── include
-        │   └── AES.h
         └── lib
             ├── AES.lib
             └── AESd.lib
 
-4 directories, 5 files
 ```
 
-**Add a source file named `aes_glue.cpp` and `CMakeLists.txt` into `native/plugins/aes/src/aes_glue.cpp`**
+**Add files `aes_glue.cpp`, `CMakeLists.txt` and `aes_glue-config.cmake`**
 
 ```
  $ mkdir native/plugins/aes/src
  $ touch native/plugins/aes/src/aes_glue.cpp
  $ touch native/plugins/aes/src/CMakeLists.txt
-```
-
-**Add `aes_glue-config.cmake` into `native/plugin/windows/`
-
-```
  $ touch native/plugins/aes/windows/aes_glue-config.cmake
 ```
 
 Now the plugin directory should looks like:
+
 ```
 $ tree native/plugins/aes/
 native/plugins/aes/
@@ -80,9 +74,6 @@ native/plugins/aes/
     └── lib
         ├── AES.lib
         └── AESd.lib
-
-4 directories, 5 files
-
 ```
 
 **Edit `aes_glue-config.cmake` with following content**
@@ -152,8 +143,6 @@ native/plugins/aes/
     └── lib
         ├── AES.lib
         └── AESd.lib
-
-4 directories, 7 files
 ```
 
 
@@ -279,7 +268,6 @@ native/plugins/aes/android/
     └── lib
         └── libaes.a
 
-4 directories, 2 files
 ```
 
 **Edit `aes_glue-config.cmake`**
@@ -357,8 +345,6 @@ native/plugins/aes/
     └── lib
         ├── AES.lib
         └── AESd.lib
-
-9 directories, 10 files
 ```
 
 It's ready to ship.
