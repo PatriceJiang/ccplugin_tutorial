@@ -1,0 +1,12 @@
+{
+    "name":"simple_aes",
+    "version":"0.1.0",
+    "author":"cocosdemo",
+    "engine-version":">=3.6.0",
+    "modules":[
+        {
+            "target":"aes_glue"
+        }
+    ],
+    "support-platforms":["windows"]
+}
