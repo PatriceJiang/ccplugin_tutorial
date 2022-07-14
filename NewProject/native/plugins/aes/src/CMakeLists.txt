@@ -9,6 +9,6 @@ target_link_libraries(aes_glue
     ${ENGINE_NAME} # cocos_engine
 )
 
-target_link_directories(aes_glue PRIVATE
+target_include_directories(aes_glue PRIVATE
     ${_AES_GLUE_SRC_DIR}/../include
 )
