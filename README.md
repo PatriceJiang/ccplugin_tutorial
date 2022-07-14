@@ -3,7 +3,7 @@
 ## How to create a native plugin
 
 
-### Step 1: create a cocos project with Cocos Creator 3.6
+### Create a cocos project with Cocos Creator 3.6
 
 Start CocosCreator application, and run `Create an empty project` in chosen folder.
 
@@ -296,12 +296,74 @@ set_target_properties(aes PROPERTIES
 include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
 ```
 
+**Update `aes_glue-config.cmake`
+
+Add `android` to `support-platform` field
+```json
+{
+    "name":"simple_aes",
+    "version":"0.1.0",
+    "author":"cocosdemo",
+    "engine-version":">=3.6.0",
+    "modules":[
+        {
+            "target":"aes_glue"
+        }
+    ],
+    "support-platforms":["windows", "android"]
+}
+
+```
+
+
 **Create a android build task**
 
 ![Android build](./doc/images/3_1_android_build.PNG)
 
 Run *Build* and debug with Android Studio.
 
+
+**Add support for iOS**
+
+TODO.
+
+**Add support for Mac**
+
+TODO.
+
+
+Now a plugin support Android & Windows is done.
+
+The final content of the plugins is:
+```
+$ tree native/plugins/aes/
+native/plugins/aes/
+├── android
+│   ├── aes_glue-config.cmake
+│   ├── arm64-v8a
+│   │   └── lib
+│   │       └── libaes.a
+│   └── armeabi-v7a
+│       └── lib
+│           └── libaes.a
+├── cc_plugin.json
+├── include
+│   └── AES.h
+├── src
+│   ├── CMakeLists.txt
+│   └── aes_glue.cpp
+└── windows
+    ├── aes_glue-config.cmake
+    └── lib
+        ├── AES.lib
+        └── AESd.lib
+
+9 directories, 10 files
+```
+
+It's ready to ship.
+
+### Distribute with Editor Extension
 
 
 

@@ -8,5 +8,5 @@
             "target":"aes_glue"
         }
     ],
-    "support-platforms":["windows"]
+    "support-platforms":["windows", "android"]
 }
