@@ -14,6 +14,10 @@ Start the CocosCreator application, and run `Create an empty project` in the cho
 
 ![save scene](doc/images/1_2_save_emtpy_scene.PNG)
 
+
+
+### Add support for Windows
+
 **Add a build for windows**
 
 ![build windows](doc/images/1_3_create_windows_build.PNG)
@@ -309,7 +313,7 @@ Add `android` to `platforms` field
 Run *Build* and debug with Android Studio.
 
 
-**Add support for iOS**
+### Add support for iOS
 
 
 Prepare a folder for iOS
@@ -333,7 +337,7 @@ include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
 
 
 
-**Add support for Mac**
+### Add support for Mac
 
 
 Prepare a folder for MacOS
