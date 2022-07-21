@@ -123,7 +123,7 @@ target_include_directories(aes_glue PRIVATE
             "target":"aes_glue"
         }
     ],
-    "support-platforms":["windows"]
+    "platforms":["windows"]
 }
 
 ```
@@ -284,7 +284,7 @@ include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
 
 **Update `aes_glue-config.cmake`
 
-Add `android` to `support-platform` field
+Add `android` to `platforms` field
 ```json
 {
     "name":"simple_aes",
@@ -296,7 +296,7 @@ Add `android` to `support-platform` field
             "target":"aes_glue"
         }
     ],
-    "support-platforms":["windows", "android"]
+    "platforms":["windows", "android"]
 }
 
 ```
@@ -357,7 +357,7 @@ include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
 
 **Update `aes_glue-config.cmake` again
 
-Add `iOS` & `mac` to `support-platform` field
+Add `iOS` & `mac` to `platforms` field
 ```json
 {
     "name":"simple_aes",
@@ -369,7 +369,7 @@ Add `iOS` & `mac` to `support-platform` field
             "target":"aes_glue"
         }
     ],
-    "support-platforms":["windows", "android", "iOS", "mac"]
+    "platforms":["windows", "android", "iOS", "mac"]
 }
 
 ```
