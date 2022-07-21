@@ -250,6 +250,8 @@ The class `AES` and its methods are exported successfully!
 
 ### Add support for Android
 
+**Add a build for Android**
+
 **create a folder for android**
 ```
 $  mkdir native/plugins/aes/android
@@ -315,6 +317,7 @@ Run *Build* and debug with Android Studio.
 
 ### Add support for iOS
 
+**Add a build for iOS**
 
 Prepare a folder for iOS
 ```
@@ -339,6 +342,8 @@ include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
 
 ### Add support for Mac
 
+
+**Add a build for MacOS**
 
 Prepare a folder for MacOS
 ```
