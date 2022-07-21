@@ -246,7 +246,6 @@ The class `AES` and it's methods are exported successfully!
 
 ### Add support for Android
 
-
 **create a folder for android**
 ```
 $  mkdir native/plugins/aes/android
@@ -397,6 +396,5 @@ It's ready to ship.
 
 ### Distribute with Editor Extension
 
-
-
+The current upgrade process for Editor Extensions is incomplete, after the native plugin directory is packaged and published to the [Cocos Store](https://docs.cocos.com/creator/manual/en/editor/extension/store/upload-store.html). It needs to be implemented by the developer in the nodejs environment for publishing and upgrading native plugin.
 
