@@ -313,11 +313,49 @@ Run *Build* and debug with Android Studio.
 
 **Add support for iOS**
 
-TODO.
+
+Prepare folder for iOS
+```
+ $ mkdir -p native/plugins/aes/ios/lib
+```
+
+Copy precompiled libraries and edit `native/plugins/aes/ios/aes_glue-config.cmake`
+
+```
+set(_AES_GLUE_DIR ${CMAKE_CURRENT_LIST_DIR})
+
+
+add_library(aes STATIC IMPORTED GLOBAL)
+set_target_properties(aes PROPERTIES
+    IMPORTED_LOCATION ${_AES_GLUE_DIR}/lib/libAES.a
+)
+
+include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
+```
+
+
 
 **Add support for Mac**
 
-TODO.
+
+Prepare folder for MacOS
+```
+ $ mkdir -p native/plugins/aes/mac/lib
+```
+
+Copy precompiled libraries and edit `native/plugins/aes/ios/aes_glue-config.cmake`
+
+```
+set(_AES_GLUE_DIR ${CMAKE_CURRENT_LIST_DIR})
+
+
+add_library(aes STATIC IMPORTED GLOBAL)
+set_target_properties(aes PROPERTIES
+    IMPORTED_LOCATION ${_AES_GLUE_DIR}/lib/libAES.a
+)
+
+include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
+```
 
 
 Now a plugin support Android & Windows is done.
@@ -325,21 +363,29 @@ Now a plugin support Android & Windows is done.
 The final content of the plugins is:
 ```
 $ tree native/plugins/aes/
-native/plugins/aes/
-├── android
-│   ├── aes_glue-config.cmake
-│   ├── arm64-v8a
-│   │   └── lib
-│   │       └── libaes.a
-│   └── armeabi-v7a
-│       └── lib
-│           └── libaes.a
+native/plugins/aes
 ├── cc_plugin.json
 ├── include
-│   └── AES.h
+│   └── AES.h
 ├── src
-│   ├── CMakeLists.txt
-│   └── aes_glue.cpp
+│   ├── CMakeLists.txt
+│   └── aes_glue.cpp
+├── android
+│   ├── aes_glue-config.cmake
+│   ├── arm64-v8a
+│   │   └── lib
+│   │       └── libaes.a
+│   └── armeabi-v7a
+│       └── lib
+│           └── libaes.a
+├── ios
+│   ├── aes_glue-config.cmake
+│   └── lib
+│       └── libAES.a
+├── mac
+│   ├── aes_glue-config.cmake
+│   └── lib
+│       └── libAES.a
 └── windows
     ├── aes_glue-config.cmake
     └── lib

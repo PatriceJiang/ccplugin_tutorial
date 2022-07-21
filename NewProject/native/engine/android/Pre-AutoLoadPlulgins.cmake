@@ -12,7 +12,6 @@ list(APPEND CC_REGISTERED_PLUGINS
 )
 
 find_package(aes_glue
-  REQUIRED
   NAMES "aes_glue"
   PATHS
     "${CC_PROJECT_DIR}/../../plugins/aes/android/${ANDROID_ABI}"
