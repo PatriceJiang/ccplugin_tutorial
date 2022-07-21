@@ -5,12 +5,12 @@
 
 ### Create a cocos project with Cocos Creator 3.6
 
-Start CocosCreator application, and run `Create an empty project` in chosen folder.
+Start the CocosCreator application, and run `Create an empty project` in the chosen folder.
 
 ![create ](doc/images/1_create_empty_project.PNG)
 
 
-**Create and save a empty scene**
+**Create and save an empty scene**
 
 ![save scene](doc/images/1_2_save_emtpy_scene.PNG)
 
@@ -29,13 +29,13 @@ native/
 
 ```
 
-**Create a folder for plugin**
+**Create a folder for the plugin**
 
 ```
 $ mkdir -p native/plugins/aes/windows/
 ```
 
-**Copy precompiled `aes` library and header files into plugin directory**
+**Copy precompiled `aes` library and header files into the plugin directory**
 
 ```
 $ tree native/plugins/
@@ -59,7 +59,7 @@ native/plugins/
  $ touch native/plugins/aes/windows/aes_glue-config.cmake
 ```
 
-Now the plugin directory should looks like:
+Now the plugin directory should look like this:
 
 ```
 $ tree native/plugins/aes/
@@ -90,7 +90,7 @@ set_target_properties(aes PROPERTIES
 include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
 ```
 
-Declare a existing library `aes` add import it.
+Declare an existing library `aes` add import it.
 
 **Edit `native/plugins/aes/src/CMakeLists.cpp` with following content**
 
@@ -146,17 +146,17 @@ native/plugins/aes/
 ```
 
 
-Now the plugin is created and enabled in this project. But it won't compile, since this no code in `aes_glue.cpp`
+Now the plugin is created and enabled in this project. But it won't compile, since there is no code in `aes_glue.cpp`
 
-Let's *Build* again in build panel to refresh th Visual Studio project.
+Let's *Build* again in the build panel to refresh the Visual Studio project.
 
 **Open the Visual Studio project under `build/windows/proj/`**
 
-Two addtional targets are generated
+Two additional targets are generated
 
 ![Solution Explorer](./doc/images/2_1_vs_project.PNG)
 
-If you run the target directly, you will fail with following link error:
+If you run the target directly, you will fail with the following link error:
 
 ![link error](./doc/images/2_1_link_error.PNG)
 
@@ -234,15 +234,15 @@ Start the project in debug mode, a new window should launch.
 
 Until now, we are not sure if the plugin is enabled or not.
 
-In the output window, we can the the debug url of devtools
+In the output window, we can the debug URL of the devtools
 
 ![debug url](./doc/images/2_3_debug_url.PNG)
 
-Open the url with chrome.
+Open the URL with chrome.
 
 ![devtools](./doc/images/2_4_devtool.PNG)
 
-The class `AES` and it's methods are exported successfully!
+The class `AES` and its methods are exported successfully!
 
 ### Add support for Android
 
@@ -251,10 +251,9 @@ The class `AES` and it's methods are exported successfully!
 $  mkdir native/plugins/aes/android
 ```
 
-**Copy precompiled libraries and headers**
-**create `aes_glue-config.cmake`**
+**Copy precompiled libraries and headers and create `aes_glue-config.cmake`**
 
-The folder should looks like this:
+The folder should look like this:
 
 ```
 $ tree native/plugins/aes/android/
@@ -303,7 +302,7 @@ Add `android` to `support-platform` field
 ```
 
 
-**Create a android build task**
+**Create an android build task**
 
 ![Android build](./doc/images/3_1_android_build.PNG)
 
@@ -313,7 +312,7 @@ Run *Build* and debug with Android Studio.
 **Add support for iOS**
 
 
-Prepare folder for iOS
+Prepare a folder for iOS
 ```
  $ mkdir -p native/plugins/aes/ios/lib
 ```
@@ -337,7 +336,7 @@ include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
 **Add support for Mac**
 
 
-Prepare folder for MacOS
+Prepare a folder for MacOS
 ```
  $ mkdir -p native/plugins/aes/mac/lib
 ```
@@ -356,8 +355,27 @@ set_target_properties(aes PROPERTIES
 include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
 ```
 
+**Update `aes_glue-config.cmake` again
 
-Now a plugin support Android & Windows is done.
+Add `iOS` & `mac` to `support-platform` field
+```json
+{
+    "name":"simple_aes",
+    "version":"0.1.0",
+    "author":"cocosdemo",
+    "engine-version":">=3.6.0",
+    "modules":[
+        {
+            "target":"aes_glue"
+        }
+    ],
+    "support-platforms":["windows", "android", "iOS", "mac"]
+}
+
+```
+
+
+Now a plugin supporting Android, Windows, MacOS & iOS is done.
 
 The final content of the plugins is:
 ```
@@ -396,5 +414,5 @@ It's ready to ship.
 
 ### Distribute with Editor Extension
 
-The current upgrade process for Editor Extensions is incomplete, after the native plugin directory is packaged and published to the [Cocos Store](https://docs.cocos.com/creator/manual/en/editor/extension/store/upload-store.html). It needs to be implemented by the developer in the nodejs environment for publishing and upgrading native plugin.
+The current upgrade process for Editor Extensions is incomplete after the native plugin directory is packaged and published to the [Cocos Store](https://docs.cocos.com/creator/manual/en/editor/extension/store/upload-store.html). It needs to be implemented by the developer in the NodeJS environment for publishing and upgrading the native plugin.
 
