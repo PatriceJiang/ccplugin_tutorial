@@ -1,9 +1,28 @@
+<!-- vscode-markdown-toc -->
+* 1. [Create a native plugin](#Createanativeplugin)
+	* 1.1. [Basic Setup](#BasicSetup)
+	* 1.2. [Add support for Windows](#AddsupportforWindows)
+	* 1.3. [Add support for Android](#AddsupportforAndroid)
+	* 1.4. [Add support for iOS](#AddsupportforiOS)
+	* 1.5. [Add support for Mac](#AddsupportforMac)
+* 2. [Distribute with Editor Extension](#DistributewithEditorExtension)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
 # Cocos Native Plugin Quick Tutorial
 
-## How to create a native plugin
+
+##  1. <a name='Createanativeplugin'></a>Create a native plugin
 
 
-### Create a cocos project with Cocos Creator 3.6
+
+
+###  1.1. <a name='BasicSetup'></a>Basic Setup
+
+**Create a cocos project with Cocos Creator 3.6**
 
 Start the CocosCreator application, and run `Create an empty project` in the chosen folder.
 
@@ -38,7 +57,7 @@ native/
 ```console
 $ mkdir -p native/plugins/hello_cocos
 ```
-### Add support for Windows
+###  1.2. <a name='AddsupportforWindows'></a>Add support for Windows
 
 Prepare the folder for Windows
 
@@ -212,7 +231,7 @@ new Demo("World").hello("Cocos")
 
 The class `hello_cocos` and its methods are exported successfully!
 
-### Add support for Android
+###  1.3. <a name='AddsupportforAndroid'></a>Add support for Android
 
 **Add a build for Android**
 
@@ -279,7 +298,7 @@ Add `android` to `platforms` field
 Run *Build* and debug with Android Studio.
 
 
-### Add support for iOS
+###  1.4. <a name='AddsupportforiOS'></a>Add support for iOS
 
 **Add a build for iOS**
 
@@ -304,7 +323,7 @@ include(${_hello_cocos_GLUE_DIR}/../src/CMakeLists.txt)
 
 
 
-### Add support for Mac
+###  1.5. <a name='AddsupportforMac'></a>Add support for Mac
 
 
 **Add a build for MacOS**
@@ -385,7 +404,7 @@ native/plugins/hello_cocos
 
 It's ready to ship.
 
-### Distribute with Editor Extension
+##  2. <a name='DistributewithEditorExtension'></a>Distribute with Editor Extension
 
 Follow the steps in [the documentation](https://docs.cocos.com/creator/manual/en/editor/extension/readme.html) to create an Editor Extension, you need to copy the directory `native/plugins/hello_cocos` into the extension package when [packaging](https://docs.cocos.com/creator/manual/en/editor/extension/store/upload-store.html#packaging-the-extension), then submit. 
 
