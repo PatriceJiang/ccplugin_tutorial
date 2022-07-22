@@ -162,53 +162,24 @@ If you run the target directly, you will fail with the following link error:
 #include "plugins/bus/EventBus.h"
 #include "plugins/Plugins.h"
 
-namespace {
-
-std::vector<uint8_t> key = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-                            0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-                            0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-                            0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
-
-std::vector<uint8_t> skipBytes = {1, 2,  3,  4,  5,  6,  7,  8,
-                                  9, 10, 11, 12, 13, 14, 15, 16};
-
-hello_cocos *hello_cocosConstructor() { return new hello_cocos(hello_cocosKeyLength::hello_cocos_256); }
-std::vector<uint8_t> hello_cocosEncrypt(hello_cocos *hello_cocos, const std::vector<uint8_t> &input) {
-  std::vector<uint8_t> copy = input;
-  // padding
-  auto appendSize = 16 - input.size() % 16;
-  copy.insert(copy.end(), skipBytes.begin(), skipBytes.begin() + appendSize);
-  return hello_cocos->EncryptECB(copy, key);
-}
-
-std::vector<uint8_t> hello_cocosDecrypt(hello_cocos *hello_cocos, const std::vector<uint8_t> &data) {
-  std::vector<uint8_t> dec= hello_cocos->DecryptECB(data, key);
-  // erase padding
-  auto padding = dec.back();
-  dec.erase(dec.end() - padding, dec.end());
-  return dec;
-}
-
-} // namespace
 
 // export c++ methods to JS
-static bool register_hello_cocos(se::Object *ns) {
+static bool register_demo(se::Object *ns) {
 
-  sebind::class_<hello_cocos> klass("hello_cocos");
+  sebind::class_<Demo> klass("Demo");
 
-  klass.constructor()
-      .function("encrypt", hello_cocosEncrypt)
-      .function("decrypt", hello_cocosDecrypt);
+  klass.constructor<const char *>()
+      .function("hello", &Demo::hello);
   klass.install(ns);
   return true;
 }
 
-void add_hello_cocos_glue() {
+void add_demo_class() {
   using namespace cc::plugin;
   static Listener listener(BusType::SCRIPT_ENGINE);
   listener.receive([](ScriptEngineEvent event) {
     if (event == ScriptEngineEvent::POST_INIT) {
-      se::ScriptEngine::getInstance()->addRegisterCallback(register_hello_cocos);
+      se::ScriptEngine::getInstance()->addRegisterCallback(register_demo);
     }
   });
 }
@@ -217,8 +188,9 @@ void add_hello_cocos_glue() {
  * Regist a new cc plugin entry function
  * first  param: should match the name in cc_plugin.json
  * second param: callback when engine initialized
- */
-CC_PLUGIN_ENTRY(hello_cocos_glue, add_hello_cocos_glue);
+ */ 
+CC_PLUGIN_ENTRY(hello_cocos_glue, add_demo_class);
+
 ```
 
 Start the project in debug mode, a new window should launch.
