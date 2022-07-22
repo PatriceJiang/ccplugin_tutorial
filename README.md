@@ -36,7 +36,7 @@ native/
 **Create a folder for the plugin**
 
 ```
-$ mkdir -p native/plugins/aes/
+$ mkdir -p native/plugins/hello_world/
 ```
 ### Add support for Windows
 
@@ -233,10 +233,10 @@ In the output window, we can the debug URL of the devtools
 
 Open the URL with chrome and type following code in Console
 ```
-
+new Demo("World").hello("Cocos")
 ```
 
-![devtools](./doc/images/2_4_devtool.PNG)
+![devtools](./doc/images/2_5_devtool.PNG)
 
 The class `AES` and its methods are exported successfully!
 

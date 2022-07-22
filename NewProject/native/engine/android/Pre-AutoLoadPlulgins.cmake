@@ -1,20 +1,20 @@
 # plugins found & enabled in search path
 
 
-set(aes_glue_ROOT
-   "${CC_PROJECT_DIR}/../../plugins/aes/android/${ANDROID_ABI}"
-   "${CC_PROJECT_DIR}/../../plugins/aes/android"
+set(hello_cocos_glue_ROOT
+   "${CC_PROJECT_DIR}/../../plugins/hello_cocos/android/${ANDROID_ABI}"
+   "${CC_PROJECT_DIR}/../../plugins/hello_cocos/android"
 )
 
-list(APPEND CMAKE_FIND_ROOT_PATH ${aes_glue_ROOT})
+list(APPEND CMAKE_FIND_ROOT_PATH ${hello_cocos_glue_ROOT})
 list(APPEND CC_REGISTERED_PLUGINS
-  aes_glue
+  hello_cocos_glue
 )
 
-find_package(aes_glue
-  NAMES "aes_glue"
+find_package(hello_cocos_glue
+  NAMES "hello_cocos_glue"
   PATHS
-    "${CC_PROJECT_DIR}/../../plugins/aes/android/${ANDROID_ABI}"
-    "${CC_PROJECT_DIR}/../../plugins/aes/android"
+    "${CC_PROJECT_DIR}/../../plugins/hello_cocos/android/${ANDROID_ABI}"
+    "${CC_PROJECT_DIR}/../../plugins/hello_cocos/android"
   NO_DEFAULT_PATH
 )

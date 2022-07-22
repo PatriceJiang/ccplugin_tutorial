@@ -31,4 +31,4 @@ void add_demo_class() {
  * first  param: should match the name in cc_plugin.json
  * second param: callback when engine initialized
  */ 
-CC_PLUGIN_ENTRY(hello_world_glue, add_demo_class);
+CC_PLUGIN_ENTRY(hello_cocos_glue, add_demo_class);

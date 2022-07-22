@@ -3,9 +3,9 @@
 set(_HELLO_COCOS_GLUE_SRC_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 
-add_library(aes STATIC IMPORTED GLOBAL)
-set_target_properties(aes PROPERTIES
-    IMPORTED_LOCATION ${_HELLO_COCOS_GLUE_SRC_DIR}/lib/hell_cocos.lib
+add_library(hello_cocos STATIC IMPORTED GLOBAL)
+set_target_properties(hello_cocos PROPERTIES
+    IMPORTED_LOCATION ${_HELLO_COCOS_GLUE_SRC_DIR}/lib/hello_cocos.lib
     IMPORTED_LOCATION_DEBUG ${_HELLO_COCOS_GLUE_SRC_DIR}/lib/hello_cocosd.lib
 )
 
