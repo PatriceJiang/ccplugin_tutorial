@@ -16,9 +16,9 @@ Start the CocosCreator application, and run `Create an empty project` in the cho
 
 
 
-### Add support for Windows
+**A native is needed to be created first to generate the `native/` directory.**
 
-**Add a build for windows**
+Create a build for any native platform, for example Windows
 
 ![build windows](doc/images/1_3_create_windows_build.PNG)
 
@@ -34,6 +34,13 @@ native/
 ```
 
 **Create a folder for the plugin**
+
+```
+$ mkdir -p native/plugins/aes/
+```
+### Add support for Windows
+
+Prepare the folder for Windows
 
 ```
 $ mkdir -p native/plugins/aes/windows/
