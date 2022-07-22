@@ -36,102 +36,102 @@ native/
 **Create a folder for the plugin**
 
 ```
-$ mkdir -p native/plugins/hello_world/
+$ mkdir -p native/plugins/hello_cocos
 ```
 ### Add support for Windows
 
 Prepare the folder for Windows
 
 ```
-$ mkdir -p native/plugins/aes/windows/
+$ mkdir -p native/plugins/hello_cocos/windows/
 ```
 
-**Copy precompiled `aes` library and header files into the plugin directory**
+**Copy precompiled `hello_cocos` library and header files into the plugin directory**
 
 ```
 $ tree native/plugins/
 native/plugins/
-└── aes
+└── hello_cocos
     ├── include
-    │   └── AES.h
+    │   └── hello_cocos.h
     └── windows
         └── lib
-            ├── AES.lib
-            └── AESd.lib
+            ├── hello_cocos.lib
+            └── hello_cocosd.lib
 
 ```
 
-**Add files `aes_glue.cpp`, `CMakeLists.txt` and `aes_glue-config.cmake`**
+**Add files `hello_cocos_glue.cpp`, `CMakeLists.txt` and `hello_cocos_glue-config.cmake`**
 
 ```
- $ mkdir native/plugins/aes/src
- $ touch native/plugins/aes/src/aes_glue.cpp
- $ touch native/plugins/aes/src/CMakeLists.txt
- $ touch native/plugins/aes/windows/aes_glue-config.cmake
+ $ mkdir native/plugins/hello_cocos/src
+ $ touch native/plugins/hello_cocos/src/hello_cocos_glue.cpp
+ $ touch native/plugins/hello_cocos/src/CMakeLists.txt
+ $ touch native/plugins/hello_cocos/windows/hello_cocos_glue-config.cmake
 ```
 
 Now the plugin directory should look like this:
 
 ```
-$ tree native/plugins/aes/
-native/plugins/aes/
+$ tree native/plugins/hello_cocos/
+native/plugins/hello_cocos/
 ├── include
-│   └── AES.h
+│   └── hello_cocos.h
 ├── src
 │   ├── CMakeLists.txt
-│   └── aes_glue.cpp
+│   └── hello_cocos_glue.cpp
 └── windows
-    ├── aes_glue-config.cmake
+    ├── hello_cocos_glue-config.cmake
     └── lib
-        ├── AES.lib
-        └── AESd.lib
+        ├── hello_cocos.lib
+        └── hello_cocosd.lib
 ```
 
-**Edit `aes_glue-config.cmake` with following content**
+**Edit `hello_cocos_glue-config.cmake` with following content**
 
 ```cmake
-set(_AES_GLUE_DIR ${CMAKE_CURRENT_LIST_DIR})
+set(_hello_cocos_GLUE_DIR ${CMAKE_CURRENT_LIST_DIR})
 
-add_library(aes STATIC IMPORTED GLOBAL)
-set_target_properties(aes PROPERTIES
-    IMPORTED_LOCATION ${_AES_GLUE_DIR}/lib/AES.lib
-    IMPORTED_LOCATION_DEBUG ${_AES_GLUE_DIR}/lib/AESd.lib
+add_library(hello_cocos STATIC IMPORTED GLOBAL)
+set_target_properties(hello_cocos PROPERTIES
+    IMPORTED_LOCATION ${_hello_cocos_GLUE_DIR}/lib/hello_cocos.lib
+    IMPORTED_LOCATION_DEBUG ${_hello_cocos_GLUE_DIR}/lib/hello_cocosd.lib
 )
 
-include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
+include(${_hello_cocos_GLUE_DIR}/../src/CMakeLists.txt)
 ```
 
-Declare an existing library `aes` add import it.
+Declare an existing library `hello_cocos` add import it.
 
-**Edit `native/plugins/aes/src/CMakeLists.txt` with following content**
+**Edit `native/plugins/hello_cocos/src/CMakeLists.txt` with following content**
 
 ```cmake
-set(_AES_GLUE_SRC_DIR ${CMAKE_CURRENT_LIST_DIR})
+set(_hello_cocos_GLUE_SRC_DIR ${CMAKE_CURRENT_LIST_DIR})
 
-add_library(aes_glue ${_AES_GLUE_SRC_DIR}/aes_glue.cpp)
+add_library(hello_cocos_glue ${_hello_cocos_GLUE_SRC_DIR}/hello_cocos_glue.cpp)
 
-target_link_libraries(aes_glue
-    aes
+target_link_libraries(hello_cocos_glue
+    hello_cocos
     ${ENGINE_NAME} # cocos_engine
 )
 
-target_include_directories(aes_glue PRIVATE
-    ${_AES_GLUE_SRC_DIR}/../include
+target_include_directories(hello_cocos_glue PRIVATE
+    ${_hello_cocos_GLUE_SRC_DIR}/../include
 )
 ```
 
 
-**Create `cc_plugin.json` in `native/plugins/aes/`**
+**Create `cc_plugin.json` in `native/plugins/hello_cocos/`**
 
 ```json
 {
-    "name":"simple_aes",
+    "name":"hello-cocos-demo",
     "version":"0.1.0",
     "author":"cocosdemo",
     "engine-version":">=3.6.0",
     "modules":[
         {
-            "target":"aes_glue"
+            "target":"hello_cocos_glue"
         }
     ],
     "platforms":["windows"]
@@ -139,7 +139,7 @@ target_include_directories(aes_glue PRIVATE
 
 ```
 
-Now the plugin is created and enabled in this project. But it won't compile, since there is no code in `aes_glue.cpp`
+Now the plugin is created and enabled in this project. But it won't compile, since there is no code in `hello_cocos_glue.cpp`
 
 Let's *Build* again in the build panel to refresh the Visual Studio project.
 
@@ -154,10 +154,10 @@ If you run the target directly, you will fail with the following link error:
 ![link error](./doc/images/2_1_link_error.PNG)
 
 
-**Edit `aes_glue.cpp`**
+**Edit `hello_cocos_glue.cpp`**
 
 ```c++
-#include "AES.h"
+#include "hello_cocos.h"
 #include "bindings/sebind/sebind.h"
 #include "plugins/bus/EventBus.h"
 #include "plugins/Plugins.h"
@@ -172,17 +172,17 @@ std::vector<uint8_t> key = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
 std::vector<uint8_t> skipBytes = {1, 2,  3,  4,  5,  6,  7,  8,
                                   9, 10, 11, 12, 13, 14, 15, 16};
 
-AES *aesConstructor() { return new AES(AESKeyLength::AES_256); }
-std::vector<uint8_t> aesEncrypt(AES *aes, const std::vector<uint8_t> &input) {
+hello_cocos *hello_cocosConstructor() { return new hello_cocos(hello_cocosKeyLength::hello_cocos_256); }
+std::vector<uint8_t> hello_cocosEncrypt(hello_cocos *hello_cocos, const std::vector<uint8_t> &input) {
   std::vector<uint8_t> copy = input;
   // padding
   auto appendSize = 16 - input.size() % 16;
   copy.insert(copy.end(), skipBytes.begin(), skipBytes.begin() + appendSize);
-  return aes->EncryptECB(copy, key);
+  return hello_cocos->EncryptECB(copy, key);
 }
 
-std::vector<uint8_t> aesDecrypt(AES *aes, const std::vector<uint8_t> &data) {
-  std::vector<uint8_t> dec= aes->DecryptECB(data, key);
+std::vector<uint8_t> hello_cocosDecrypt(hello_cocos *hello_cocos, const std::vector<uint8_t> &data) {
+  std::vector<uint8_t> dec= hello_cocos->DecryptECB(data, key);
   // erase padding
   auto padding = dec.back();
   dec.erase(dec.end() - padding, dec.end());
@@ -192,23 +192,23 @@ std::vector<uint8_t> aesDecrypt(AES *aes, const std::vector<uint8_t> &data) {
 } // namespace
 
 // export c++ methods to JS
-static bool register_aes(se::Object *ns) {
+static bool register_hello_cocos(se::Object *ns) {
 
-  sebind::class_<AES> klass("AES");
+  sebind::class_<hello_cocos> klass("hello_cocos");
 
   klass.constructor()
-      .function("encrypt", aesEncrypt)
-      .function("decrypt", aesDecrypt);
+      .function("encrypt", hello_cocosEncrypt)
+      .function("decrypt", hello_cocosDecrypt);
   klass.install(ns);
   return true;
 }
 
-void add_aes_glue() {
+void add_hello_cocos_glue() {
   using namespace cc::plugin;
   static Listener listener(BusType::SCRIPT_ENGINE);
   listener.receive([](ScriptEngineEvent event) {
     if (event == ScriptEngineEvent::POST_INIT) {
-      se::ScriptEngine::getInstance()->addRegisterCallback(register_aes);
+      se::ScriptEngine::getInstance()->addRegisterCallback(register_hello_cocos);
     }
   });
 }
@@ -218,7 +218,7 @@ void add_aes_glue() {
  * first  param: should match the name in cc_plugin.json
  * second param: callback when engine initialized
  */
-CC_PLUGIN_ENTRY(aes_glue, add_aes_glue);
+CC_PLUGIN_ENTRY(hello_cocos_glue, add_hello_cocos_glue);
 ```
 
 Start the project in debug mode, a new window should launch.
@@ -238,7 +238,7 @@ new Demo("World").hello("Cocos")
 
 ![devtools](./doc/images/2_5_devtool.PNG)
 
-The class `AES` and its methods are exported successfully!
+The class `hello_cocos` and its methods are exported successfully!
 
 ### Add support for Android
 
@@ -246,52 +246,52 @@ The class `AES` and its methods are exported successfully!
 
 **create a folder for android**
 ```
-$  mkdir native/plugins/aes/android
+$  mkdir native/plugins/hello_cocos/android
 ```
 
-**Copy precompiled libraries and headers and create `aes_glue-config.cmake`**
+**Copy precompiled libraries and headers and create `hello_cocos_glue-config.cmake`**
 
 The folder should look like this:
 
 ```
-$ tree native/plugins/aes/android/
-native/plugins/aes/android/
-├── aes_glue-config.cmake
+$ tree native/plugins/hello_cocos/android/
+native/plugins/hello_cocos/android/
+├── hello_cocos_glue-config.cmake
 ├── arm64-v8a
 │   └── lib
-│       └── libaes.a
+│       └── libhello_cocos.a
 └── armeabi-v7a
     └── lib
-        └── libaes.a
+        └── libhello_cocos.a
 
 ```
 
-**Edit `aes_glue-config.cmake`**
+**Edit `hello_cocos_glue-config.cmake`**
 
 ```cmake
-set(_AES_GLUE_DIR ${CMAKE_CURRENT_LIST_DIR})
+set(_hello_cocos_GLUE_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 
-add_library(aes STATIC IMPORTED GLOBAL)
-set_target_properties(aes PROPERTIES
-    IMPORTED_LOCATION ${_AES_GLUE_DIR}/${ANDROID_ABI}/lib/libaes.a
+add_library(hello_cocos STATIC IMPORTED GLOBAL)
+set_target_properties(hello_cocos PROPERTIES
+    IMPORTED_LOCATION ${_hello_cocos_GLUE_DIR}/${ANDROID_ABI}/lib/libhello_cocos.a
 )
 
-include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
+include(${_hello_cocos_GLUE_DIR}/../src/CMakeLists.txt)
 ```
 
-**Update `aes_glue-config.cmake`
+**Update `hello_cocos_glue-config.cmake`
 
 Add `android` to `platforms` field
 ```json
 {
-    "name":"simple_aes",
+    "name":"hello-cocos-demo",
     "version":"0.1.0",
     "author":"cocosdemo",
     "engine-version":">=3.6.0",
     "modules":[
         {
-            "target":"aes_glue"
+            "target":"hello_cocos_glue"
         }
     ],
     "platforms":["windows", "android"]
@@ -313,21 +313,21 @@ Run *Build* and debug with Android Studio.
 
 Prepare a folder for iOS
 ```
- $ mkdir -p native/plugins/aes/ios/lib
+ $ mkdir -p native/plugins/hello_cocos/ios/lib
 ```
 
-Copy precompiled libraries and edit `native/plugins/aes/ios/aes_glue-config.cmake`
+Copy precompiled libraries and edit `native/plugins/hello_cocos/ios/hello_cocos_glue-config.cmake`
 
 ```
-set(_AES_GLUE_DIR ${CMAKE_CURRENT_LIST_DIR})
+set(_hello_cocos_GLUE_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 
-add_library(aes STATIC IMPORTED GLOBAL)
-set_target_properties(aes PROPERTIES
-    IMPORTED_LOCATION ${_AES_GLUE_DIR}/lib/libAES.a
+add_library(hello_cocos STATIC IMPORTED GLOBAL)
+set_target_properties(hello_cocos PROPERTIES
+    IMPORTED_LOCATION ${_hello_cocos_GLUE_DIR}/lib/libhello_cocos.a
 )
 
-include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
+include(${_hello_cocos_GLUE_DIR}/../src/CMakeLists.txt)
 ```
 
 
@@ -339,35 +339,35 @@ include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
 
 Prepare a folder for MacOS
 ```
- $ mkdir -p native/plugins/aes/mac/lib
+ $ mkdir -p native/plugins/hello_cocos/mac/lib
 ```
 
-Copy precompiled libraries and edit `native/plugins/aes/ios/aes_glue-config.cmake`
+Copy precompiled libraries and edit `native/plugins/hello_cocos/ios/hello_cocos_glue-config.cmake`
 
 ```
-set(_AES_GLUE_DIR ${CMAKE_CURRENT_LIST_DIR})
+set(_hello_cocos_GLUE_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 
-add_library(aes STATIC IMPORTED GLOBAL)
-set_target_properties(aes PROPERTIES
-    IMPORTED_LOCATION ${_AES_GLUE_DIR}/lib/libAES.a
+add_library(hello_cocos STATIC IMPORTED GLOBAL)
+set_target_properties(hello_cocos PROPERTIES
+    IMPORTED_LOCATION ${_hello_cocos_GLUE_DIR}/lib/libhello_cocos.a
 )
 
-include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
+include(${_hello_cocos_GLUE_DIR}/../src/CMakeLists.txt)
 ```
 
-**Update `aes_glue-config.cmake` again**
+**Update `hello_cocos_glue-config.cmake` again**
 
 Add `iOS` & `mac` to `platforms` field
 ```json
 {
-    "name":"simple_aes",
+    "name":"hello-cocos-demo",
     "version":"0.1.0",
     "author":"cocosdemo",
     "engine-version":">=3.6.0",
     "modules":[
         {
-            "target":"aes_glue"
+            "target":"hello_cocos_glue"
         }
     ],
     "platforms":["windows", "android", "iOS", "mac"]
@@ -380,35 +380,35 @@ Now a plugin supporting Android, Windows, MacOS & iOS is done.
 
 The final content of the plugins is:
 ```
-$ tree native/plugins/aes/
-native/plugins/aes
+$ tree native/plugins/hello_cocos/
+native/plugins/hello_cocos
 ├── cc_plugin.json
 ├── include
-│   └── AES.h
+│   └── hello_cocos.h
 ├── src
 │   ├── CMakeLists.txt
-│   └── aes_glue.cpp
+│   └── hello_cocos_glue.cpp
 ├── android
-│   ├── aes_glue-config.cmake
+│   ├── hello_cocos_glue-config.cmake
 │   ├── arm64-v8a
 │   │   └── lib
-│   │       └── libaes.a
+│   │       └── libhello_cocos.a
 │   └── armeabi-v7a
 │       └── lib
-│           └── libaes.a
+│           └── libhello_cocos.a
 ├── ios
-│   ├── aes_glue-config.cmake
+│   ├── hello_cocos_glue-config.cmake
 │   └── lib
-│       └── libAES.a
+│       └── libhello_cocos.a
 ├── mac
-│   ├── aes_glue-config.cmake
+│   ├── hello_cocos_glue-config.cmake
 │   └── lib
-│       └── libAES.a
+│       └── libhello_cocos.a
 └── windows
-    ├── aes_glue-config.cmake
+    ├── hello_cocos_glue-config.cmake
     └── lib
-        ├── AES.lib
-        └── AESd.lib
+        ├── hello_cocos.lib
+        └── hello_cocosd.lib
 ```
 
 It's ready to ship.
