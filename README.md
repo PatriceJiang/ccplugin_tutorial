@@ -96,7 +96,7 @@ include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
 
 Declare an existing library `aes` add import it.
 
-**Edit `native/plugins/aes/src/CMakeLists.cpp` with following content**
+**Edit `native/plugins/aes/src/CMakeLists.txt` with following content**
 
 ```cmake
 set(_AES_GLUE_SRC_DIR ${CMAKE_CURRENT_LIST_DIR})
@@ -131,24 +131,6 @@ target_include_directories(aes_glue PRIVATE
 }
 
 ```
-
-Let's see what we have in the plugin directory:
-```
-$ tree native/plugins/aes/
-native/plugins/aes/
-├── cc_plugin.json
-├── include
-│   └── AES.h
-├── src
-│   ├── CMakeLists.txt
-│   └── aes_glue.cpp
-└── windows
-    ├── aes_glue-config.cmake
-    └── lib
-        ├── AES.lib
-        └── AESd.lib
-```
-
 
 Now the plugin is created and enabled in this project. But it won't compile, since there is no code in `aes_glue.cpp`
 
@@ -364,7 +346,7 @@ set_target_properties(aes PROPERTIES
 include(${_AES_GLUE_DIR}/../src/CMakeLists.txt)
 ```
 
-**Update `aes_glue-config.cmake` again
+**Update `aes_glue-config.cmake` again**
 
 Add `iOS` & `mac` to `platforms` field
 ```json
@@ -423,5 +405,5 @@ It's ready to ship.
 
 ### Distribute with Editor Extension
 
-The current upgrade process for Editor Extensions is incomplete after the native plugin directory is packaged and published to the [Cocos Store](https://docs.cocos.com/creator/manual/en/editor/extension/store/upload-store.html). It needs to be implemented by the developer in the NodeJS environment for publishing and upgrading the native plugin.
+The current upgrade process for Editor Extensions is incomplete. After the native plugin directory is packaged and published to the [Cocos Store](https://docs.cocos.com/creator/manual/en/editor/extension/store/upload-store.html). It needs to be implemented by the developer in the NodeJS environment for publishing and upgrading the native plugin.
 
