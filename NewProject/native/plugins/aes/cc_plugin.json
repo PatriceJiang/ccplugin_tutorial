@@ -1,11 +1,11 @@
 {
-    "name":"simple_aes",
+    "name":"hello-cocos-demo",
     "version":"0.1.0",
     "author":"cocosdemo",
     "engine-version":">=3.6.0",
     "modules":[
         {
-            "target":"aes_glue"
+            "target":"hello_cocos_glue"
         }
     ],
     "platforms":["windows", "android", "mac", "iOS"]

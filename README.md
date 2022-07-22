@@ -1,4 +1,4 @@
-# Cocos Native Plugin Development Tutorial
+# Cocos Native Plugin Quick Tutorial
 
 ## How to create a native plugin
 
