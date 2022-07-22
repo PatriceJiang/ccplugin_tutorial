@@ -387,5 +387,7 @@ It's ready to ship.
 
 ### Distribute with Editor Extension
 
-The current upgrade process for Editor Extensions is incomplete. After the native plugin directory is packaged and published to the [Cocos Store](https://docs.cocos.com/creator/manual/en/editor/extension/store/upload-store.html). It needs to be implemented by the developer in the NodeJS environment for publishing and upgrading the native plugin.
+Follow the steps in [the documentation](https://docs.cocos.com/creator/manual/en/editor/extension/readme.html) to create an Editor Extension, you need to copy the directory `native/plugins/hello_cocos` into the extension package in [this step](https://docs.cocos.com/creator/manual/en/editor/extension/store/upload-store.html#packaging-the-extension), then submit. 
 
+About upgrade: The plugin system does not support update detection at the moment. Developers need to check in Cocos Store or Dashboard and manually upgrade to the latest version. 
+Of course, developers can still implement their own version management based on the existing extension system. 
