@@ -224,7 +224,10 @@ In the output window, we can the debug URL of the devtools
 
 ![debug url](./doc/images/2_3_debug_url.PNG)
 
-Open the URL with chrome.
+Open the URL with chrome and type following code in Console
+```
+
+```
 
 ![devtools](./doc/images/2_4_devtool.PNG)
 
