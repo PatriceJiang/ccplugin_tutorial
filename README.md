@@ -16,7 +16,7 @@ Start the CocosCreator application, and run `Create an empty project` in the cho
 
 
 
-**A native is needed to be created first to generate the `native/` directory.**
+**A native build is needed to be created first to generate the `native/` directory.**
 
 Create a build for any native platform, for example Windows
 
