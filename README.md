@@ -24,7 +24,7 @@ Create a build for any native platform, for example Windows
 
 Run *Build*, `native/` folder should be created after that.
 
-```
+```console
 $ tree native/ -L 2
 native/
 └── engine
@@ -35,20 +35,20 @@ native/
 
 **Create a folder for the plugin**
 
-```
+```console
 $ mkdir -p native/plugins/hello_cocos
 ```
 ### Add support for Windows
 
 Prepare the folder for Windows
 
-```
+```console
 $ mkdir -p native/plugins/hello_cocos/windows/
 ```
 
 **Copy precompiled `hello_cocos` library and header files into the plugin directory**
 
-```
+```console
 $ tree native/plugins/
 native/plugins/
 └── hello_cocos
@@ -63,7 +63,7 @@ native/plugins/
 
 **Add files `hello_cocos_glue.cpp`, `CMakeLists.txt` and `hello_cocos_glue-config.cmake`**
 
-```
+```console
  $ mkdir native/plugins/hello_cocos/src
  $ touch native/plugins/hello_cocos/src/hello_cocos_glue.cpp
  $ touch native/plugins/hello_cocos/src/CMakeLists.txt
@@ -72,7 +72,7 @@ native/plugins/
 
 Now the plugin directory should look like this:
 
-```
+```console
 $ tree native/plugins/hello_cocos/
 native/plugins/hello_cocos/
 ├── include
@@ -232,7 +232,7 @@ In the output window, we can the debug URL of the devtools
 ![debug url](./doc/images/2_3_debug_url.PNG)
 
 Open the URL with chrome and type following code in Console
-```
+```javascript
 new Demo("World").hello("Cocos")
 ```
 
@@ -245,7 +245,7 @@ The class `hello_cocos` and its methods are exported successfully!
 **Add a build for Android**
 
 **create a folder for android**
-```
+```console
 $  mkdir native/plugins/hello_cocos/android
 ```
 
@@ -253,7 +253,7 @@ $  mkdir native/plugins/hello_cocos/android
 
 The folder should look like this:
 
-```
+```console
 $ tree native/plugins/hello_cocos/android/
 native/plugins/hello_cocos/android/
 ├── hello_cocos_glue-config.cmake
@@ -318,7 +318,7 @@ Prepare a folder for iOS
 
 Copy precompiled libraries and edit `native/plugins/hello_cocos/ios/hello_cocos_glue-config.cmake`
 
-```
+```cmake
 set(_hello_cocos_GLUE_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 
@@ -338,13 +338,13 @@ include(${_hello_cocos_GLUE_DIR}/../src/CMakeLists.txt)
 **Add a build for MacOS**
 
 Prepare a folder for MacOS
-```
+```console
  $ mkdir -p native/plugins/hello_cocos/mac/lib
 ```
 
 Copy precompiled libraries and edit `native/plugins/hello_cocos/ios/hello_cocos_glue-config.cmake`
 
-```
+```cmake
 set(_hello_cocos_GLUE_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 
@@ -379,7 +379,7 @@ Add `iOS` & `mac` to `platforms` field
 Now a plugin supporting Android, Windows, MacOS & iOS is done.
 
 The final content of the plugins is:
-```
+```console
 $ tree native/plugins/hello_cocos/
 native/plugins/hello_cocos
 ├── cc_plugin.json
