@@ -56,6 +56,7 @@ jobs:
       - name: Checkout cocos-engines
         shell: bash
         run: |
+          set -x
           git clone --branch v3.6.1 --depth 1 https://github.com/cocos/cocos-engine engine
           cd engine/native
           rm -rf external
@@ -72,6 +73,7 @@ jobs:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         shell: bash
         run: |
+          set -x
           COCOS_X_PATH=$GITHUB_WORKSPACE/engine/native
           NATIVE_DIR=$GITHUB_WORKSPACE/NewProject/native/engine/android
           RES_PATH=$GITHUB_WORKSPACE/NewProject/build/android
@@ -83,7 +85,9 @@ jobs:
           $ANDROID_HOME/tools/bin/sdkmanager "cmake;3.18.1"
 
       - name: Compile
+        shell: bash
         run: |
+          set -x
           cd NewProject/build/android/proj
           ./gradlew assembleDebug
           echo "Compile Android Debug Done!"
