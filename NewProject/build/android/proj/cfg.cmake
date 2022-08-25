@@ -4,7 +4,6 @@ set(USE_SERVER_MODE OFF)
 set(NET_MODE 0)
 
 set(CC_ENABLE_SWAPPY OFF)
-set(EDITOR_NODEJS "I:/Github/editor-3d/node_modules/electron/dist/electron.exe")
 set(APP_NAME NewProject)
 set(COCOS_X_PATH "I:/Github/editor-3d/resources/3d/engine/native")
 set(USE_JOB_SYSTEM_TASKFLOW OFF)
@@ -20,5 +19,3 @@ set(USE_WEBVIEW ON)
 set(USE_SPINE ON)
 set(USE_DRAGONBONES ON)
 set(CC_USE_VULKAN OFF)
-
-#set(SKIP_SCAN_PLUGINS ON)
