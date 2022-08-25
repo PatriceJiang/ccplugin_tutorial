@@ -90,6 +90,7 @@ jobs:
         run: |
           set -x
           cd NewProject/build/android/proj
+          chmod +x gradlew
           ./gradlew assembleDebug
           echo "Compile Android Debug Done!"
 
