@@ -81,6 +81,7 @@ jobs:
           RES_PATH=$GITHUB_WORKSPACE/NewProject/build/android
           sed -i "s@^.*COCOS_X_PATH.*@set(COCOS_X_PATH $COCOS_X_PATH)@g"    NewProject/build/android/proj/cfg.cmake
           sed -i "s@^RES_PATH.*@RES_PATH=$RES_PATH@g"                       NewProject/build/android/proj/gradle.properties
+          sed -i "s@^COCOS_ENGINE_PATH.*@COCOS_ENGINE_PATH=$COCOS_X_PATH@g"                       NewProject/build/android/proj/gradle.properties
           sed -i "s@^NATIVE_DIR.*@NATIVE_DIR=$NATIVE_DIR@g"                 NewProject/build/android/proj/gradle.properties
           sed -i "s@^PROP_NDK_PATH.*@PROP_NDK_PATH=$ANDROID_NDK_HOME@g"     NewProject/build/android/proj/gradle.properties
           sed -i "s@^RELEASE_STORE_FILE.*@RELEASE_STORE_FILE=$KEYSTORE@g"   NewProject/build/android/proj/gradle.properties
