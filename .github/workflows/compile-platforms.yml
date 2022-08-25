@@ -56,7 +56,7 @@ jobs:
       - name: Checkout cocos-engines
         shell: bash
         run: |
-          git clone --branch v3.6.1 --depth 1 https://github.com/cocos/engine engine
+          git clone --branch v3.6.1 --depth 1 https://github.com/cocos/cocos-engine engine
           cd engine/native
           rm -rf external
           EXT_VERSION=`grep version external-config.json  |awk -F'"' '{print $4}'`
