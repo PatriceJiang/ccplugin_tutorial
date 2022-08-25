@@ -79,11 +79,14 @@ jobs:
           NATIVE_DIR=$GITHUB_WORKSPACE/NewProject/native/engine/android
           KEYSTORE=$GITHUB_WORKSPACE/NewProject/native/engine/android/debug.keystore
           RES_PATH=$GITHUB_WORKSPACE/NewProject/build/android
-          sed -i "s@^.*COCOS_X_PATH.*@set(COCOS_X_PATH $COCOS_X_PATH)@g" NewProject/build/android/proj/cfg.cmake
-          sed -i "s@^RES_PATH.*@RES_PATH=$RES_PATH@g" NewProject/build/android/proj/gradle.properties
-          sed -i "s@^NATIVE_DIR.*@NATIVE_DIR=$NATIVE_DIR@g" NewProject/build/android/proj/gradle.properties
-          sed -i "s@^PROP_NDK_PATH.*@PROP_NDK_PATH=$ANDROID_NDK_HOME@g" NewProject/build/android/proj/gradle.properties
-          sed -i "s@^RELEASE_STORE_FILE.*@RELEASE_STORE_FILE=$KEYSTORE@g" NewProject/build/android/proj/gradle.properties
+          sed -i "s@^.*COCOS_X_PATH.*@set(COCOS_X_PATH $COCOS_X_PATH)@g"    NewProject/build/android/proj/cfg.cmake
+          sed -i "s@^RES_PATH.*@RES_PATH=$RES_PATH@g"                       NewProject/build/android/proj/gradle.properties
+          sed -i "s@^NATIVE_DIR.*@NATIVE_DIR=$NATIVE_DIR@g"                 NewProject/build/android/proj/gradle.properties
+          sed -i "s@^PROP_NDK_PATH.*@PROP_NDK_PATH=$ANDROID_NDK_HOME@g"     NewProject/build/android/proj/gradle.properties
+          sed -i "s@^RELEASE_STORE_FILE.*@RELEASE_STORE_FILE=$KEYSTORE@g"   NewProject/build/android/proj/gradle.properties
+          sed -i "s@^sdk.dir.*@sdk.dir=$ANDROID_HOME@g"                     NewProject/build/android/proj/local.properties
+          echo "inspect gradle.properties"
+          cat NewProject/build/android/proj/gradle.properties
           # install android cmake
           $ANDROID_HOME/tools/bin/sdkmanager "cmake;3.18.1"
 
