@@ -58,8 +58,9 @@ jobs:
         run: |
           set -x
           git clone --branch v3.6.1 --depth 1 https://github.com/cocos/cocos-engine engine
+          cd engine
           EXT_VERSION=`node ./.github/workflows/get-native-external-version.js`
-          cd engine/native
+          cd native
           rm -rf external
           git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external external
       - uses: nttld/setup-ndk@v1
