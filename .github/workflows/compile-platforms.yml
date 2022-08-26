@@ -80,11 +80,6 @@ jobs:
           cat NewProject/build/android/proj/gradle.properties
           # install android cmake
           $ANDROID_HOME/tools/bin/sdkmanager "cmake;3.18.1"
-          AUTOGEN_SRC=`find . -name plugin_registry_autogen.cpp`
-          if [[ $AUTOGEN_SRC == '' ]]; then
-            echo "plugin_registry_autogen.cpp not found"
-            exit 1
-          fi
 
       - name: Compile
         shell: bash
@@ -94,6 +89,11 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug
           echo "Compile Android Debug Done!"
+          AUTOGEN_SRC=`find . -name plugin_registry_autogen.cpp`
+          if [[ $AUTOGEN_SRC == '' ]]; then
+            echo "plugin_registry_autogen.cpp not found"
+            exit 1
+          fi
 
   compile_mac:
     name: "MacOS"
