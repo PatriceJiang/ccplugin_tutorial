@@ -46,8 +46,8 @@ jobs:
         shell: bash
         run: |
           set -x
-          git clone --branch v3.6.1-native-plugins-fix-search-path --depth 1 https://github.com/PatriceJiang/engine engine
-          #git clone --branch v3.6.1 --depth 1 https://github.com/cocos/cocos-engine engine
+          #git clone --branch v3.6.1-native-plugins-fix-search-path --depth 1 https://github.com/PatriceJiang/engine engine
+          git clone --branch v3.6.1 --depth 1 https://github.com/cocos/cocos-engine engine
           cd engine
           EXT_VERSION=`node ./.github/workflows/get-native-external-version.js`
           cd native
