@@ -25,9 +25,9 @@ jobs:
           ROOT=${GITHUB_WORKSPACE//\\//}
           COCOS_X_PATH=$ROOT/engine/native
           NATIVE_DIR=$ROOT/NewProject/native/engine/win64
-          RES_PATH=$ROOT/NewProject/build/windows
+          RES_DIR=$ROOT/NewProject/build/windows
           sed -i "s@^.*COCOS_X_PATH.*@set(COCOS_X_PATH $COCOS_X_PATH)@g"    NewProject/build/windows/proj/cfg.cmake
-          cd $NATIVE_DIR/proj
+          cd $RES_DIR/proj
           cmake -S $NATIVE_DIR -B . -DRES_DIR=$RES_DIR
           cmake --build . --config Debug
           echo "Compile Windows Debug done!"
@@ -106,9 +106,9 @@ jobs:
           ROOT=${GITHUB_WORKSPACE//\\//}
           COCOS_X_PATH=$ROOT/engine/native
           NATIVE_DIR=$ROOT/NewProject/native/engine/mac
-          RES_PATH=$ROOT/NewProject/build/mac
+          RES_DIR=$ROOT/NewProject/build/mac
           gsed -i "s@^.*COCOS_X_PATH.*@set(COCOS_X_PATH $COCOS_X_PATH)@g"    NewProject/build/mac/proj/cfg.cmake
-          cd $NATIVE_DIR/proj
+          cd $RES_DIR/proj
           cmake -S $NATIVE_DIR -B . -DRES_DIR=$RES_DIR -GXcode -DCMAKE_OSX_ARCHITECTURES=x86_64
           NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
           cmake --build . --config Debug -- -quiet -jobs $NUM_OF_CORES -arch x86_64
