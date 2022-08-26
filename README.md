@@ -1,3 +1,5 @@
+[![🏗️ Compile](https://github.com/PatriceJiang/ccplugin_tutorial/actions/workflows/compile-platforms.yml/badge.svg)](https://github.com/PatriceJiang/ccplugin_tutorial/actions/workflows/compile-platforms.yml)
+
 <!-- vscode-markdown-toc -->
 * 1. [Create a native plugin](#Createanativeplugin)
 	* 1.1. [Basic Setup](#BasicSetup)
