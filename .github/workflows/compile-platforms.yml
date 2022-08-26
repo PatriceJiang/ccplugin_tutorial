@@ -18,7 +18,7 @@ jobs:
           cd native
           rm -rf external
           git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external external
-      - name: set cocos_engine
+      - name: Compile Windows
         shell: bash
         run: |
           set -x
@@ -31,6 +31,11 @@ jobs:
           cmake -S $NATIVE_DIR -B . -DRES_DIR=$RES_DIR
           cmake --build . --config Debug
           echo "Compile Windows Debug done!"
+          AUTOGEN_SRC=`find . -name plugin_registry_autogen.cpp`
+          if [[ $AUTOGEN_SRC == '' ]]; then
+            echo "plugin_registry_autogen.cpp not found"
+            exit 1
+          fi
 
   compile_android:
     name: "Android"
@@ -41,7 +46,8 @@ jobs:
         shell: bash
         run: |
           set -x
-          git clone --branch v3.6.1 --depth 1 https://github.com/cocos/cocos-engine engine
+          git clone --branch v3.6.1-native-plugins-fix-search-path --depth 1 https://github.com/PatriceJiang/engine engine
+          #git clone --branch v3.6.1 --depth 1 https://github.com/cocos/cocos-engine engine
           cd engine
           EXT_VERSION=`node ./.github/workflows/get-native-external-version.js`
           cd native
@@ -74,6 +80,11 @@ jobs:
           cat NewProject/build/android/proj/gradle.properties
           # install android cmake
           $ANDROID_HOME/tools/bin/sdkmanager "cmake;3.18.1"
+          AUTOGEN_SRC=`find . -name plugin_registry_autogen.cpp`
+          if [[ $AUTOGEN_SRC == '' ]]; then
+            echo "plugin_registry_autogen.cpp not found"
+            exit 1
+          fi
 
       - name: Compile
         shell: bash
@@ -99,7 +110,7 @@ jobs:
           cd native
           rm -rf external
           git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external external
-      - name: set cocos_engine
+      - name: Compile Mac
         shell: bash
         run: |
           set -x
@@ -114,6 +125,11 @@ jobs:
           NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
           cmake --build . --config Debug -- -quiet -jobs $NUM_OF_CORES -arch x86_64
           echo "Compile Mac Debug done!"
+          AUTOGEN_SRC=`find . -name plugin_registry_autogen.cpp`
+          if [[ $AUTOGEN_SRC == '' ]]; then
+            echo "plugin_registry_autogen.cpp not found"
+            exit 1
+          fi
 
   compile_iOS:
     name: "iOS"
@@ -133,7 +149,7 @@ jobs:
           cd native
           rm -rf external
           git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external external
-      - name: set cocos_engine
+      - name: Compile iOS
         shell: bash
         run: |
           set -x
@@ -151,3 +167,8 @@ jobs:
           NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
           cmake --build . --config Debug -- -quiet -jobs $NUM_OF_CORES CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
           echo "Compile iOS Debug done!"
+          AUTOGEN_SRC=`find . -name plugin_registry_autogen.cpp`
+          if [[ $AUTOGEN_SRC == '' ]]; then
+            echo "plugin_registry_autogen.cpp not found"
+            exit 1
+          fi
