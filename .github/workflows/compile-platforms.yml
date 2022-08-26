@@ -3,50 +3,41 @@ name: 🏗️ Compile
 on: [push, pull_request]
 
 jobs:
-  # compile_windows:
-  #   runs-on: windows-2016
-  #   name: "Windows"
-
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Download external libraries
-  #       shell: bash
-  #       run: |
-  #         EXT_VERSION=`grep version external/config.json  |awk -F'"' '{print $4}'`
-  #         rm external/config.json
-  #         git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos-creator/engine-native-external external
-  #     - name: Install deps
-  #       run: |
-  #         choco install --forcex86 vulkan-sdk
-  #         python -m pip install PyYAML==5.4.1 Cheetah3
-  #     - name: Generate bindings
-  #       shell: bash
-  #       run: |
-  #         python -V
-  #         cd ./tools/tojs
-  #         echo "Create auto-generated jsbinding glue codes."
-  #         python ./genbindings.py
-  #         rm userconf.ini
-  #     - name: Compile win32
-  #       shell: bash
-  #       env:
-  #         COCOS_ENGINE_DEV: 1
-  #       run: |
-  #         cd $GITHUB_WORKSPACE/templates/windows
-  #         mkdir -p build-win32/proj
-  #         touch build-win32/proj/cfg.cmake
-  #         echo "set(CC_USE_GLES3 ON)" >> build-win32/proj/cfg.cmake
-  #         echo "set(CC_USE_VULKAN ON)" >> build-win32/proj/cfg.cmake
-  #         echo "set(CC_USE_GLES2 ON)" >> build-win32/proj/cfg.cmake
-  #         echo "set(USE_WEBSOCKET_SERVER ON)" >> build-win32/proj/cfg.cmake
-  #         echo "set(CMAKE_CXX_STANDARD_REQUIRED ON)" >> build-win32/proj/cfg.cmake
-  #         mkdir build-win32/assets
-  #         cd build-win32
-  #         RES_DIR=${GITHUB_WORKSPACE//\\//}/templates/windows/build-win32
-  #         COCOS_X_PATH=${GITHUB_WORKSPACE//\\//}
-  #         cmake ../ -G"Visual Studio 15 2017" -DRES_DIR=$RES_DIR -DCOCOS_X_PATH=$COCOS_X_PATH -Awin32
-  #         cmake --build . --config Release
-  #         echo "Compile Win32 Release Done!"
+  compile_windows:
+    runs-on: windows-2019
+    name: "Windows"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Checkout cocos-engines
+        shell: bash
+        run: |
+          set -x
+          git clone --branch v3.6.1 --depth 1 https://github.com/cocos/cocos-engine engine
+          cd engine
+          EXT_VERSION=`node ./.github/workflows/get-native-external-version.js`
+          cd native
+          rm -rf external
+          git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external external
+      - uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r21e
+          add-to-path: false
+      - name: set cocos_engine
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+        shell: bash
+        run: |
+          set -x
+          ROOT=${GITHUB_WORKSPACE//\\//}
+          COCOS_X_PATH=$ROOT/engine/native
+          NATIVE_DIR=$ROOT/NewProject/native/engine/win64
+          RES_PATH=$ROOT/NewProject/build/windows
+          sed -i "s@^.*COCOS_X_PATH.*@set(COCOS_X_PATH $COCOS_X_PATH)@g"    NewProject/build/win64/proj/cfg.cmake
+          cd NATIVE_DIR/proj
+          cmake -S $NATIVE_DIR -B . -DRES_DIR=$RES_DIR
+          cmake --build . --config Debug
+          echo "Compile Windows Debug done!"
 
   compile_android:
     name: "Android"
