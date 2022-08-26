@@ -103,6 +103,7 @@ jobs:
         shell: bash
         run: |
           set -x
+          brew install gsed
           ROOT=${GITHUB_WORKSPACE//\\//}
           COCOS_X_PATH=$ROOT/engine/native
           NATIVE_DIR=$ROOT/NewProject/native/engine/mac
