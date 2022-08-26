@@ -18,14 +18,7 @@ jobs:
           cd native
           rm -rf external
           git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external external
-      - uses: nttld/setup-ndk@v1
-        id: setup-ndk
-        with:
-          ndk-version: r21e
-          add-to-path: false
       - name: set cocos_engine
-        env:
-          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         shell: bash
         run: |
           set -x
@@ -33,8 +26,8 @@ jobs:
           COCOS_X_PATH=$ROOT/engine/native
           NATIVE_DIR=$ROOT/NewProject/native/engine/win64
           RES_PATH=$ROOT/NewProject/build/windows
-          sed -i "s@^.*COCOS_X_PATH.*@set(COCOS_X_PATH $COCOS_X_PATH)@g"    NewProject/build/win64/proj/cfg.cmake
-          cd NATIVE_DIR/proj
+          sed -i "s@^.*COCOS_X_PATH.*@set(COCOS_X_PATH $COCOS_X_PATH)@g"    NewProject/build/windows/proj/cfg.cmake
+          cd $NATIVE_DIR/proj
           cmake -S $NATIVE_DIR -B . -DRES_DIR=$RES_DIR
           cmake --build . --config Debug
           echo "Compile Windows Debug done!"
@@ -91,63 +84,35 @@ jobs:
           ./gradlew assembleDebug
           echo "Compile Android Debug Done!"
 
-  # compile_mac:
-  #   name: "MacOS"
-  #   runs-on: macos-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: "3.x"
-  #     - name: Download external libraries
-  #       shell: bash
-  #       run: |
-  #         EXT_VERSION=`grep version external/config.json  |awk -F'"' '{print $4}'`
-  #         rm external/config.json
-  #         git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos-creator/engine-native-external external
-  #     - name: Generate bindings
-  #       run: |
-  #         python -m pip install PyYAML==5.4.1 Cheetah3
-  #         python ./tools/tojs/genbindings.py
-  #         rm ./tools/tojs/userconf.ini
-  #     - name: Compile
-  #       env:
-  #         COCOS_ENGINE_DEV: 1
-  #       run: |
-  #         NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
-  #         COCOS2DX_ROOT=$GITHUB_WORKSPACE   
-  #         echo "Compiling MacOSX ... "
-  #         cd  $COCOS2DX_ROOT/templates/mac
-  #         mkdir -p build-mac/proj
-  #         touch build-mac/proj/cfg.cmake
-  #         echo "set(CC_USE_VULKAN OFF)" >> build-mac/proj/cfg.cmake
-  #         echo "set(CC_USE_GLES2 OFF)" >> build-mac/proj/cfg.cmake
-  #         echo "set(CC_USE_METAL ON)" >> build-mac/proj/cfg.cmake
-  #         echo "set(USE_WEBSOCKET_SERVER OFF)" >> build-mac/proj/cfg.cmake
-  #         echo "set(CMAKE_CXX_STANDARD_REQUIRED ON)" >> build-mac/proj/cfg.cmake
-  #         mkdir build-mac/assets
-
-  #         RES_DIR=$COCOS2DX_ROOT/templates/mac/build-mac
-  #         cd build-mac
-  #         cmake ../ -GXcode -DCC_USE_GLES3=ON -DCMAKE_OSX_ARCHITECTURES=x86_64 -DRES_DIR=$RES_DIR -DCOCOS_X_PATH=$COCOS2DX_ROOT
-  #         set +e
-  #         cmake --build . --config Release -- -quiet -jobs $NUM_OF_CORES -arch x86_64
-  #         retcode=$?
-  #         set -e
-  #         if [ $retcode -ne 0 ]; then
-  #             echo "-----------------------------------------------------------------------------------------------"
-  #             echo "------------------------------------ recompile without `-quiet` -------------------------------"
-  #             echo "-----------------------------------------------------------------------------------------------"
-  #             cmake --build . --config Release -- -jobs $NUM_OF_CORES -arch x86_64
-  #         fi
-  #         echo "Compile MacOSX x86_64 Release Done!"
-
-  #         cd ..
-  #         mkdir build-mac-apple-silicon
-  #         cd build-mac-apple-silicon
-  #         cmake ../ -GXcode -DCC_USE_GLES3=OFF -DCMAKE_OSX_ARCHITECTURES=arm64 -DRES_DIR=$RES_DIR -DCOCOS_X_PATH=$COCOS2DX_ROOT
-  #         cmake --build . --config Release -- -quiet -jobs $NUM_OF_CORES -arch arm64
-  #         echo "Compile MacOSX ARM64 Release Done!"
+  compile_mac:
+    name: "MacOS"
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Checkout cocos-engines
+        shell: bash
+        run: |
+          set -x
+          git clone --branch v3.6.1 --depth 1 https://github.com/cocos/cocos-engine engine
+          cd engine
+          EXT_VERSION=`node ./.github/workflows/get-native-external-version.js`
+          cd native
+          rm -rf external
+          git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external external
+      - name: set cocos_engine
+        shell: bash
+        run: |
+          set -x
+          ROOT=${GITHUB_WORKSPACE//\\//}
+          COCOS_X_PATH=$ROOT/engine/native
+          NATIVE_DIR=$ROOT/NewProject/native/engine/mac
+          RES_PATH=$ROOT/NewProject/build/mac
+          sed -i "s@^.*COCOS_X_PATH.*@set(COCOS_X_PATH $COCOS_X_PATH)@g"    NewProject/build/mac/proj/cfg.cmake
+          cd $NATIVE_DIR/proj
+          cmake -S $NATIVE_DIR -B . -DRES_DIR=$RES_DIR -GXcode -DCMAKE_OSX_ARCHITECTURES=x86_64
+          NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
+          cmake --build . --config Debug -- -quiet -jobs $NUM_OF_CORES -arch x86_64
+          echo "Compile Mac Debug done!"
 
   # compile_iOS:
   #   name: "iOS"
