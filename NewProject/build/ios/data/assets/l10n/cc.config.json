@@ -1,0 +1,24 @@
+{
+    "importBase": "import",
+    "nativeBase": "native",
+    "name": "l10n",
+    "deps": [],
+    "uuids": [
+        "a3e19b37-09b0-4794-aa6d-fa64a53eb793"
+    ],
+    "paths": {
+        "a3e19b37-09b0-4794-aa6d-fa64a53eb793": [
+            "languages",
+            "cc.JsonAsset"
+        ]
+    },
+    "scenes": {},
+    "packs": {},
+    "versions": {
+        "import": [],
+        "native": []
+    },
+    "redirect": [],
+    "debug": true,
+    "extensionMap": {}
+}

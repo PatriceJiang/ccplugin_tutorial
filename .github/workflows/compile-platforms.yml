@@ -115,65 +115,39 @@ jobs:
           cmake --build . --config Debug -- -quiet -jobs $NUM_OF_CORES -arch x86_64
           echo "Compile Mac Debug done!"
 
-  # compile_iOS:
-  #   name: "iOS"
-  #   runs-on: macos-latest
-  #   steps:
-  #     - uses: maxim-lobanov/setup-xcode@v1
-  #       with:
-  #         xcode-version: latest-stable
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: "3.x"
-  #     - name: Download external libraries
-  #       shell: bash
-  #       run: |
-  #         EXT_VERSION=`grep version external/config.json  |awk -F'"' '{print $4}'`
-  #         rm external/config.json
-  #         git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos-creator/engine-native-external external
-  #     - name: Generate bindings
-  #       run: |
-  #         python -m pip install PyYAML==5.4.1  Cheetah3
-  #         python ./tools/tojs/genbindings.py
-  #         rm ./tools/tojs/userconf.ini
-  #     - name: Compile
-  #       env:
-  #         COCOS_ENGINE_DEV: 1
-  #       run: |
-  #         set -x
-  #         NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
-  #         COCOS2DX_ROOT=$GITHUB_WORKSPACE  
-  #         echo "Compiling iOS ... "
-  #         cd  $COCOS2DX_ROOT/templates/ios
-  #         mkdir -p build-ios/proj
-  #         touch build-ios/proj/cfg.cmake
-  #         echo "set(CC_USE_GLES3 OFF)" >> build-ios/proj/cfg.cmake
-  #         echo "set(CC_USE_VULKAN OFF)" >> build-ios/proj/cfg.cmake
-  #         echo "set(CC_USE_GLES2 OFF)" >> build-ios/proj/cfg.cmake
-  #         echo "set(CC_USE_METAL ON)" >> build-ios/proj/cfg.cmake
-  #         echo "set(TARGET_IOS_VERSION 12.0)" >> build-ios/proj/cfg.cmake
-  #         echo "set(USE_WEBSOCKET_SERVER OFF)" >> build-ios/proj/cfg.cmake
-  #         echo "set(USE_DRAGONBONES OFF)" >> build-ios/proj/cfg.cmake
-  #         echo "set(CMAKE_CXX_STANDARD_REQUIRED OFF)" >> build-ios/proj/cfg.cmake
-  #         echo "set(MACOSX_BUNDLE_GUI_IDENTIFIER com.cocos.demo.ios)" >> build-ios/proj/cfg.cmake
-  #         mkdir build-ios/assets
-  #         cd build-ios
-  #         RES_DIR=$COCOS2DX_ROOT/templates/ios/build-ios
-  #         cmake ../ -GXcode -DCMAKE_SYSTEM_NAME=iOS \
-  #             -DCMAKE_OSX_SYSROOT=iphoneos \
-  #             -DCMAKE_OSX_ARCHITECTURES=arm64 \
-  #             -DRES_DIR=$RES_DIR \
-  #             -DCOCOS_X_PATH=$COCOS2DX_ROOT
-  #         set +e
-  #         #cmake --build . --config Debug -- -quiet -jobs $NUM_OF_CORES -allowProvisioningUpdates CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO 
-  #         cmake --build . --config Debug -- -quiet -jobs $NUM_OF_CORES CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-  #         retcode=$?
-  #         set -e
-  #         if [ $retcode -ne 0 ]; then
-  #             echo "-----------------------------------------------------------------------------------------------"
-  #             echo "------------------------------------ recompile without `-quiet` -------------------------------"
-  #             echo "-----------------------------------------------------------------------------------------------"
-  #             cmake --build . --config Debug --  -jobs $NUM_OF_CORES CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-  #         fi
-  #         echo "Compile iOS Done!"
+  compile_iOS:
+    name: "iOS"
+    runs-on: macos-latest
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - uses: actions/checkout@v2
+      - name: Checkout cocos-engines
+        shell: bash
+        run: |
+          set -x
+          git clone --branch v3.6.1 --depth 1 https://github.com/cocos/cocos-engine engine
+          cd engine
+          EXT_VERSION=`node ./.github/workflows/get-native-external-version.js`
+          cd native
+          rm -rf external
+          git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external external
+      - name: set cocos_engine
+        shell: bash
+        run: |
+          set -x
+          brew install gsed
+          ROOT=${GITHUB_WORKSPACE//\\//}
+          COCOS_X_PATH=$ROOT/engine/native
+          NATIVE_DIR=$ROOT/NewProject/native/engine/ios
+          RES_DIR=$ROOT/NewProject/build/ios
+          gsed -i "s@^.*COCOS_X_PATH.*@set(COCOS_X_PATH $COCOS_X_PATH)@g"    NewProject/build/ios/proj/cfg.cmake
+          cd $RES_DIR/proj
+          cmake -S $NATIVE_DIR -B . -DRES_DIR=$RES_DIR -GXcode \
+             -DCMAKE_SYSTEM_NAME=iOS \
+             -DCMAKE_OSX_SYSROOT=iphoneos \
+             -DCMAKE_OSX_ARCHITECTURES=arm64 
+          NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
+          cmake --build . --config Debug -- -quiet -jobs $NUM_OF_CORES CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+          echo "Compile iOS Debug done!"
