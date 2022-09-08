@@ -1,6 +1,11 @@
 name: 🏗️ Compile
 
-on: [push, pull_request]
+  #on: [push, pull_request]
+on:
+  push
+  pull_request
+  schedule:
+    - cron: "* */4 * * *"
 
 jobs:
   compile_windows:
