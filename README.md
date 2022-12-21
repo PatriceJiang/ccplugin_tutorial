@@ -178,11 +178,17 @@ If you run the target directly, you will fail with the following link error:
 **Edit `hello_cocos_glue.cpp`**
 
 ```c++
+
 #include "hello_cocos.h"
 #include "bindings/sebind/sebind.h"
-#include "plugins/bus/EventBus.h"
+#include "cocos.h"
+#if defined(COCOS_VERSION)  // && COCOS_VERSION >= 30700
+  #include "engine/EngineEvents.h"
+#else
+// 3.6.x
+  #include "plugins/bus/EventBus.h"
+#endif
 #include "plugins/Plugins.h"
-
 
 // export c++ methods to JS
 static bool register_demo(se::Object *ns) {
@@ -194,7 +200,19 @@ static bool register_demo(se::Object *ns) {
   klass.install(ns);
   return true;
 }
+#if defined(COCOS_VERSION) 
+// 3.7.x+
+void add_demo_class() {
+  static cc::events::ScriptEngine::Listener listener;
+  listener.bind([](cc::ScriptEngineEvent event) {
+    if (event == cc::ScriptEngineEvent::AFTER_INIT) {
+      se::ScriptEngine::getInstance()->addRegisterCallback(register_demo);
+    }
+  });
+}
 
+#else
+// 3.6.x
 void add_demo_class() {
   using namespace cc::plugin;
   static Listener listener(BusType::SCRIPT_ENGINE);
@@ -204,6 +222,8 @@ void add_demo_class() {
     }
   });
 }
+
+#endif
 
 /**
  * Regist a new cc plugin entry function
