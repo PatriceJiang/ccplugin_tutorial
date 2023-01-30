@@ -2,6 +2,7 @@
 #include "hello_cocos.h"
 #include "bindings/sebind/sebind.h"
 #include "cocos.h"
+#include <memory>
 #if defined(COCOS_VERSION)  // && COCOS_VERSION >= 30700
   #include "engine/EngineEvents.h"
 #else
@@ -35,8 +36,12 @@ void add_demo_class() {
 // 3.6.x
 void add_demo_class() {
   using namespace cc::plugin;
-  static Listener listener(BusType::SCRIPT_ENGINE);
-  listener.receive([](ScriptEngineEvent event) {
+  static std::unique_ptr<Listener> listener;
+  if(listener) {
+    listener.reset(); // remove previous listen when restart 
+  }
+  listener = std::make_unique<Listener>(BusType::SCRIPT_ENGINE);
+  listener->receive([](ScriptEngineEvent event) {
     if (event == ScriptEngineEvent::POST_INIT) {
       se::ScriptEngine::getInstance()->addRegisterCallback(register_demo);
     }
